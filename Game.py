@@ -1,37 +1,40 @@
 """resposable for game mechanics"""
+import Role1
+import Role2
+def play_game(player_name):
+    speed = 10
+    defense = 20
+    magic = 15
 
-import random
+    role = input("Enter '1' to play as Paladin or '2' to play as Necromancer: ")
+    if role == '1':
+        player = Role1.create_paladin(player_name, speed, defense)
+        opponent = Role2.create_necromancer("AI", magic, defense)
+    else:
+        player = Role2.create_necromancer(player_name, magic, defense)
+        opponent = Role1.create_paladin("AI", speed, defense)
 
-def play_game():
-    player1 = create_player("Paladin")
-    player2 = create_player("Necromancer")
+    player_health = 20
+    opponent_health = 20
 
     while True:
-        player1_attack = player_attack(player1["speed"])
-        player2_defense = player_defense(player2["defense"])
-        player2["health"] -= max(0, player1_attack - player2_defense)
+        print("Your turn to attack")
+        attack_choice = input("Enter 'a' to attack, 'q' to quit: ")
+        if attack_choice == 'q':
+            return
 
-        if player2["health"] <= 0:
-            return f"{player1['name']} wins!"
+        opponent_defense = Role2.defend(opponent, player['speed']) if role == '1' else Role1.defend(opponent, player['magic'])
+        opponent_health = max(0, opponent_health - (Role1.attack(player) if role == '1' else Role2.cast_spell(player) - opponent_defense))
 
-        player2_attack = player_attack(player2["speed"])
-        player1_defense = player_defense(player1["defense"])
-        player1["health"] -= max(0, player2_attack - player1_defense)
+        if opponent_health <= 0:
+            print(f"{player['name']} wins!")
+            return
 
-        if player1["health"] <= 0:
-            return f"{player2['name']} wins!"
+        print("Opponent's turn to attack")
+        opponent_attack = Role2.cast_spell(opponent) if role == '1' else Role1.attack(opponent)
+        player_defense = Role1.defend(player, opponent['magic']) if role == '1' else Role2.defend(player, opponent['speed'])
+        player_health = max(0, player_health - (opponent_attack - player_defense))
 
-def create_player(role):
-    player = {
-        "name": role,
-        "speed": random.randint(1, 6),
-        "defense": random.randint(1, 6),
-        "health": 20,
-    }
-    return player
-
-def player_attack(speed):
-    return speed + random.randint(1, 12)
-
-def player_defense(defense):
-    return defense + random.randint(1, 12)
+        if player_health <= 0:
+            print(f"{opponent['name']} wins!")
+            return
