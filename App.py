@@ -1,12 +1,19 @@
 """interacts with user"""
-import random
-import Game
-import Role1
-import Role2
 
-print("Welcome to the Combat Arena!")
-print("In this game, you will face a series of enemies in an arena.")
-print("You will be playing as either a Paladin or a Necromancer.")
+from Game import play_game
 
 def main():
-    pass
+    print("Welcome to the Combat Arena RPG Game!")
+    print("You will be facing 3 AI-controlled enemies in turn-based combat.")
+
+    # Get player name
+    player_name = input("Enter your name: ")
+
+    # Start the game
+    play_game(player_name)
+
+    print("Thanks for playing!")
+
+
+if __name__ == "__main__":
+    main()
