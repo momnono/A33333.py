@@ -1,5 +1,6 @@
-from Game import play_game
+"""interactions with end-user"""
 
+from Game import play_game
 
 
 
